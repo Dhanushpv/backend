@@ -2,6 +2,7 @@ const http = require('http');
 const port = 3000;
 const url = require('url');
 const fs = require('fs');
+const queryString = require('querystring')
 
 const server = http.createServer((req, res)=>{
     const req_url = req.url;
@@ -26,9 +27,29 @@ const server = http.createServer((req, res)=>{
     }else if(parsed_url.pathname === '/anitta'){
         res.writeHead(299,{'Content-Type':'text/json'});
         res.end(fs.readFileSync('../server/datas.json'))
+    }else if(parsed_url.pathname === '/submit' && req.method === 'POST'){
+        console.log("Reached here.....");
+
+        let body = '';
+
+        req.on('data',(chunks)=>{
+            console.log("chunks : ",chunks);
+            body += chunks.toString();
+        });
+
+        req.on('end' , ()=>{
+            console.log("body : ", body);
+
+            let datas = queryString.parse(body);
+            console.log("datas : ", datas);
+
+            console.log("name : ", datas.name);
+            console.log("email : ", datas.email);
+            console.log("password: ", datas.password);
+        })
     }
 
 })
 server.listen(port, () =>{
     console.log(`server running at http://localhost:${port}`)
-})
+});
