@@ -4,7 +4,7 @@ const url = require('url');
 const fs = require('fs');
 const queryString = require('querystring');
 const {MongoClient}=require ('mongodb');
-const { error } = require('console');
+
 const client = new MongoClient('mongodb://localhost:27017');
 
 async function connect(){
